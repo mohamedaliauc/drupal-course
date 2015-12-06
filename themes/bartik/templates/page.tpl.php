@@ -241,7 +241,7 @@
         <?php print render($page['footer']); ?>
       </div> <!-- /#footer -->
     <?php endif; ?>
-<?php print $footer_message;?>
+
   </div></div> <!-- /.section, /#footer-wrapper -->
 
 </div></div> <!-- /#page, /#page-wrapper -->

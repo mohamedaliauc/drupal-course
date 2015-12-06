@@ -41,7 +41,7 @@ function bartik_process_html(&$variables) {
  */
 function bartik_process_page(&$variables) {
   $variables['site_slogan']='Hello Theming, '.$variables['user']->name;
-  kpr($variables);
+  //kpr($variables);
   // Hook into color.module.
   if (module_exists('color')) {
     _color_page_alter($variables);
