@@ -1,0 +1,150 @@
+<?php
+/*
+*hook_node_view
+*/
+
+function demo_node_view($node, $view_mode, $langcode)
+{
+	
+$node->content['demo_field']=array(
+'#type'=>'markup',
+'#markup'=>'<p>'.t('This is just a demo').'</p>',
+'#weight'=>'-10',
+);
+//krumo($node);
+}
+function demo_menu()
+{
+$items=array();
+
+$items['admin/config/people/badpasswords']=array(
+		'title'=>'Bad Password List',
+		'page callback'=>'drupal_get_form',
+		'page arguments'=>array('demo_passwords_form'),
+		'access arguments'=>array('Adminster site configuration'),
+		'file'=>'demo_passwords_form.inc',
+	);
+
+$items['magic']=array(
+'title'=>'Magic link',
+'page callback'=>'demo_menu_basic',
+'access arguments'=>array('access content'),
+);
+$items['user/%user/magic']=array(
+'title'=>'Magic',
+'description'=>'Magical magic for users',
+'page callback'=>'menu_magic_user_tab',
+'page arguments'=>array(1),
+'access callback'=>'user_access',
+'access arguments'=>array('administer users'),
+'type'=>MENU_LOCAL_TASK,
+);
+
+$items['node/%node/magic']=array(
+'title'=>'Magic',
+'description'=>'Magical magic for users',
+'page callback'=>'menu_magic_node_tab',
+'page arguments'=>array(1),
+'access arguments'=>array('access content'),
+'type'=>MENU_LOCAL_TASK,
+);
+return $items;
+}
+function menu_magic_node_tab($node)
+{
+
+$content=array('content_raw'=>array(
+'#type'=>'markup',
+'#markup'=>'<p>'.t('%node is awesome',array('%node'=>$node->title)).'</p>',
+)
+);
+return $content;
+}
+function menu_magic_user_tab($user)
+{
+
+$content=array('content_raw'=>array(
+'#type'=>'markup',
+'#markup'=>t('%user is awesome',array('%user'=>$user->name)),
+'#prefix'=>"<h2>",
+'#suffix'=>"</h2>"
+)
+);
+return $content;
+}
+function demo_menu_basic()
+{
+$content=array();
+$content['content_raw']=array(
+'#type'=>'markup',
+'#markup'=>t('This is just a demo'),
+'#prefix'=>"<h2>",
+'#suffix'=>"</h2>",
+);
+
+$variables=array(
+'path'=>'http://placekitten.com/440/400',
+'alt'=>t('this is a magical kitten'),
+'title'=>t('Magical kitten'),
+);
+$content['themed_data']=array(
+'#type'=>'markup',
+'#markup'=>theme('image',$variables),
+'#prefix'=>'<div class="menu-magic-image">',
+'#suffix'=>'</div>',
+'#attached'=>array(
+'css'=>array(
+drupal_get_path('module','demo').'/custom.css'
+)
+),
+);
+$content['themed_items']=array(
+'#theme'=>'item_list',
+'#title'=>t('My items list'),
+'#items'=>array(
+'item 1',
+'item 2',
+)
+);
+return $content;
+}
+
+function demo_page_alter(&$page)
+{
+if(arg(0)=='magic')
+{
+$page['content']['system_main']['themed_items']['#type']='ol';
+dsm($page);
+}
+}
+
+/*
+* Implement hook_form_alter
+*/
+function demo_form_alter(&$form,&$form_state,$form_id)
+{
+	krumo($form_id);
+	switch($form_id)
+	{
+		case 'user_profile_form':
+		$form['account']['pass']['#description']=t('Please do not use common passwords');
+		krumo($form);
+		break;
+	}
+}
+/*
+* Implement hook_form_form_id_alter
+*/
+function demo_form_user_register_form_alter(&$form,&$form_state,$form_id)
+{
+	$form['#validate'][]='demo_validate_password';
+
+}
+function demo_validate_password($form,&$form_state)
+{
+	if(strpos($form_state['values']['mail'],'@aucegypt.edu')==false)
+	{
+		form_set_error('mail','Please enter an AUC mail');
+	}
+	krumo($form_state);
+}

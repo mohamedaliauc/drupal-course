@@ -1,0 +1,66 @@
+<?php
+
+function spy_glass_node_view($node, $view_mode, $langcode)
+{
+
+//krumo($node);
+}
+function spy_glass_menu()
+{
+	$items=array();
+	$items['node/%node/spyglass']=array(
+	'title'=>'Spy Glass',
+	'description'=>'Spy Glass',
+	'page callback'=>'spy_glass_node_tab',
+	'page arguments'=>array(1),
+	'access arguments'=>array('access content'),
+	'type'=>MENU_LOCAL_TASK,
+	);
+	return $items;
+}
+function spy_glass_node_tab($node)
+{
+	
+	$info=get_info($node);
+	$content=array();
+	foreach ($info as $item) {
+		$content[]=array(
+				'#type'=>'markup',
+				'#markup'=>theme('spy_glass_item',$item)
+			);
+	}
+	return $content;
+}
+function get_info($node)
+{
+	$info=array();
+	$info[]=array(
+		'title'=>'Task 0',
+		'data'=>'Data 1'
+	);
+	$info[]=array(
+		'title'=>'Task 2',
+		'data'=>'Data 2'
+	);
+	$info[]=array(
+		'title'=>'Task 3',
+		'data'=>'Data 3'
+	);
+	$info[]=array(
+		'title'=>'Task 4',
+		'data'=>'Data 4'
+	);
+	return $info;
+}
+function spy_glass_theme()
+{
+	return array(
+			'spy_glass_item'=>array(
+				'variables'=>array('item'=>NULL)
+				)
+		);
+}
+function theme_spy_glass_item($variables)
+{
+	return '<p>'.'<strong>'.$variables['title'].'</strong><br/>'.$variables['data'].'</p>';
+}
