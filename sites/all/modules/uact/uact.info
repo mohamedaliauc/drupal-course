@@ -1,0 +1,4 @@
+name = UACT Training
+description = New Module
+core = 7.x
+package = UACT
