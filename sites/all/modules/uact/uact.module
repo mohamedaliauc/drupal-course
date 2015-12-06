@@ -1,0 +1,54 @@
+<?php
+/*
+ *Implements hook_form_alter *
+ */
+ function uact_form_alter(&$form, &$form_state, $form_id)
+ {
+ 	if($form_id=='story_node_form')
+	{
+		global $user;
+		if ($user->uid==1) {
+			dsm($form);
+			
+			$form['field_sub_title']['und'][0]['value']['#required']=FALSE;
+			$form['uact_filedset'] = array(
+
+			  '#type' => 'fieldset', 
+			
+			  '#title' => t('New Fields'), 
+			
+			  '#weight' => 5, 
+			
+			  '#collapsible' => TRUE, 
+			
+			  '#collapsed' => FALSE,
+			
+			);
+			$form['uact_filedset']['uact_title'] = array(
+
+			  '#type' => 'textfield', 
+			
+			  '#title' => t('Subject'), 
+			
+			  '#default_value' => t('for test'), 
+			
+			  '#size' => 60, 
+			
+			  '#maxlength' => 128, 
+			
+			  '#required' => TRUE,
+			
+			);
+			$form['uact_filedset']['selected'] = array(
+       '#type' => 'select',
+       '#title' => t('Select List'),
+       '#options' => array(
+          0 => t('Option1'),
+         1 => t('Opetion 2'),
+       ),
+       '#default_value' => 0,
+       '#description' => t('Set this to <em>Yes</em> if you would like this category to be selected by default.'),
+   );
+		}
+	}
+ }
