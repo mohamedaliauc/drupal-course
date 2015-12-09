@@ -52,3 +52,11 @@
 		}
 	}
  }
+function uact_block_info() {
+  $blocks['pending-comments'] = array(
+    'info' => t('Pending Comments'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
